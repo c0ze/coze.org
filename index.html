@@ -8,14 +8,33 @@
     <meta name="keywords" content="coze.org, domain acquisition, premium domain, Count Zero, William Gibson, cyberpunk" />
     <meta name="author" content="coze.org" />
 
+    <link rel="canonical" href="https://coze.org/">
+
     <meta property="og:title" content="coze.org" />
     <meta property="og:description" content="Premium domain available for acquisition. 'Coze': to converse in a friendly and intimate way." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://coze.org" />
+    <meta property="og:url" content="https://coze.org/" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="coze.org" />
     <meta name="twitter:description" content="Premium domain available for acquisition." />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "coze.org",
+      "description": "Premium four-letter dictionary-word .org domain, registered in 2004. From 'coze': to converse in a friendly and intimate way.",
+      "url": "https://coze.org/",
+      "offers": {
+        "@type": "Offer",
+        "price": "10000",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "url": "https://www.afternic.com/domain/coze.org"
+      }
+    }
+    </script>
     <style>
         :root {
             --bg-color: #0a0a0a;
@@ -27,8 +46,10 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Courier New', Courier, monospace; /* Retro terminal vibe */
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 4rem 1rem;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -59,8 +80,21 @@
             opacity: 0.7;
         }
 
+        .price {
+            margin-top: 3rem;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
         .contact-box {
-            margin-top: 4rem;
+            margin-top: 1.5rem;
             border: 1px solid var(--text-color);
             padding: 1rem 2rem;
             transition: all 0.3s ease;
@@ -69,6 +103,38 @@
         .contact-box:hover {
             background-color: var(--text-color);
             color: var(--bg-color);
+        }
+
+        .meanwhile {
+            margin-top: 5rem;
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            max-width: 600px;
+        }
+
+        .meanwhile h2 {
+            font-size: 0.85rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            opacity: 0.7;
+        }
+
+        .meanwhile ul {
+            list-style: none;
+            margin: 1rem 0 0;
+            padding: 0;
+            line-height: 2;
+        }
+
+        .meanwhile a {
+            text-transform: none;
+            font-size: 0.85rem;
+            text-decoration: underline;
+        }
+
+        .meanwhile a:hover {
+            color: var(--text-color);
         }
 
         a {
@@ -80,8 +146,7 @@
         }
 
         footer {
-            position: absolute;
-            bottom: 20px;
+            margin-top: 4rem;
             font-size: 0.7rem;
             opacity: 0.3;
         }
@@ -99,14 +164,32 @@
         <small><em>See also: <a href="https://en.wikipedia.org/wiki/Count_Zero" target="_blank" style="text-decoration: underline; color: inherit;">Count Zero</a> (Gibson, 1986).</em></small>
     </div>
 
-    <div class="contact-box">
-        <a href="mailto:inquiry@coze.org?subject=coze.org%20acquisition">
-            Inquire About Acquisition
-        </a>
+    <div class="price">$10,000</div>
+
+    <div class="actions">
+        <div class="contact-box">
+            <a href="https://www.afternic.com/domain/coze.org" rel="nofollow">
+                Buy Now via Afternic
+            </a>
+        </div>
+        <div class="contact-box">
+            <a href="mailto:inquiry@coze.org?subject=coze.org%20acquisition">
+                Make an Offer
+            </a>
+        </div>
     </div>
 
+    <section class="meanwhile">
+        <h2>Meanwhile, it hosts</h2>
+        <ul>
+            <li><a href="https://zork.coze.org/">zork.coze.org</a> — the classic text adventures, illustrated &amp; narrated</li>
+            <li><a href="https://adarkroom.coze.org/">adarkroom.coze.org</a> — A Dark Room, the minimalist fire-stoking epic</li>
+            <li><a href="https://tsl.coze.org/">tsl.coze.org</a> — The Slimy Lichmummy, a stern roguelike</li>
+        </ul>
+    </section>
+
     <footer>
-        &copy; 2025. All rights reserved.
+        &copy; 2026. All rights reserved.
     </footer>
 
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "30446e57d04b456b8e301eda079cef58"}'></script><!-- End Cloudflare Web Analytics -->
