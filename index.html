@@ -35,11 +35,38 @@
       }
     }
     </script>
+    <script>
+        // Anti-flash: apply stored theme before first paint
+        (function () {
+            var t = localStorage.getItem('coze-theme');
+            if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+        })();
+    </script>
     <style>
         :root {
             --bg-color: #0a0a0a;
             --text-color: #e0e0e0;
             --accent-color: #888; /* Grey, like despair */
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root:not([data-theme]) {
+                --bg-color: #f4f2ec;
+                --text-color: #1a1a1a;
+                --accent-color: #777; /* Still grey, still despair */
+            }
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f4f2ec;
+            --text-color: #1a1a1a;
+            --accent-color: #777;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0a0a0a;
+            --text-color: #e0e0e0;
+            --accent-color: #888;
         }
 
         body {
@@ -150,9 +177,35 @@
             font-size: 0.7rem;
             opacity: 0.3;
         }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1rem;
+            line-height: 1;
+            padding: 0.5rem 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        body, .contact-box, .theme-toggle {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
     </style>
 </head>
 <body>
+
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme">☾</button>
 
     <h1>coze.org</h1>
 
@@ -191,6 +244,26 @@
     <footer>
         &copy; 2026. All rights reserved.
     </footer>
+
+    <script>
+        (function () {
+            var btn = document.querySelector('.theme-toggle');
+            var mq = window.matchMedia('(prefers-color-scheme: light)');
+            function effective() {
+                return document.documentElement.dataset.theme ||
+                    (mq.matches ? 'light' : 'dark');
+            }
+            function paint() { btn.textContent = effective() === 'dark' ? '☀' : '☾'; }
+            btn.addEventListener('click', function () {
+                var next = effective() === 'dark' ? 'light' : 'dark';
+                document.documentElement.dataset.theme = next;
+                localStorage.setItem('coze-theme', next);
+                paint();
+            });
+            mq.addEventListener('change', paint);
+            paint();
+        })();
+    </script>
 
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "30446e57d04b456b8e301eda079cef58"}'></script><!-- End Cloudflare Web Analytics -->
 
