@@ -157,6 +157,72 @@
             color: var(--text-color);
         }
 
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+
+        .meanwhile a.card {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--accent-color);
+            text-decoration: none;
+            font-weight: 400;
+            color: var(--accent-color);
+            transition: border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .card img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 40 / 21;
+            object-fit: cover;
+            border-bottom: 1px solid var(--accent-color);
+            filter: grayscale(1) contrast(1.05);
+            transition: filter 0.3s ease;
+        }
+
+        .card-body {
+            padding: 0.9rem 1rem 1rem;
+            line-height: 1.5;
+        }
+
+        .card-host {
+            display: block;
+            color: var(--text-color);
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .card-host::after {
+            content: " \2192";
+        }
+
+        .meanwhile a.card:hover,
+        .meanwhile a.card:focus-visible {
+            border-color: var(--text-color);
+            color: var(--text-color);
+        }
+
+        .meanwhile a.card:focus-visible {
+            outline: 2px solid var(--text-color);
+            outline-offset: 2px;
+        }
+
+        .card:hover img,
+        .card:focus-visible img {
+            filter: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .meanwhile a.card, .card img { transition: none; }
+        }
+
         a {
             text-decoration: none;
             color: inherit;
@@ -225,6 +291,22 @@
 
     <section class="meanwhile">
         <h2>Meanwhile, it hosts</h2>
+        <div class="cards">
+            <a class="card" href="https://dergi.coze.org/">
+                <img src="/img/dergi.webp" width="800" height="420" alt="" loading="lazy">
+                <span class="card-body">
+                    <span class="card-host">dergi.coze.org</span>
+                    Turkish Commodore 64 and Amiga magazines from 1985 on: every issue page by page, every article searchable.
+                </span>
+            </a>
+            <a class="card" href="https://retro.coze.org/">
+                <img src="/img/retro.webp" width="800" height="420" alt="" loading="lazy">
+                <span class="card-body">
+                    <span class="card-host">retro.coze.org</span>
+                    RETRO, a monthly Turkish magazine on games, metal, hardware and AI, written by AI in the voice of a 90s print magazine.
+                </span>
+            </a>
+        </div>
         <ul>
             <li><a href="https://zork.coze.org/">zork.coze.org</a> — the classic text adventures, illustrated &amp; narrated</li>
             <li><a href="https://adarkroom.coze.org/">adarkroom.coze.org</a> — A Dark Room, the minimalist fire-stoking epic</li>
