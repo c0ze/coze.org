@@ -29,7 +29,7 @@
     }
     </script>
     <script>
-        // Anti-flash: apply stored theme before first paint
+        // Anti-flash: apply stored theme before first paint; no key means follow the system
         (function () {
             var t = localStorage.getItem('coze-theme');
             if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
@@ -259,7 +259,7 @@
 </head>
 <body>
 
-    <button class="theme-toggle" type="button" aria-label="Toggle color theme">☾</button>
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme">◐</button>
 
     <h1>coze.org</h1>
 
@@ -314,18 +314,27 @@
     </footer>
 
     <script>
+        // Three states: system (no data-theme, no stored key) -> light -> dark -> system
         (function () {
+            var root = document.documentElement;
             var btn = document.querySelector('.theme-toggle');
             var mq = window.matchMedia('(prefers-color-scheme: light)');
-            function effective() {
-                return document.documentElement.dataset.theme ||
-                    (mq.matches ? 'light' : 'dark');
+            var NEXT = { system: 'light', light: 'dark', dark: 'system' };
+            var GLYPH = { system: '◐', light: '☀', dark: '☾' };
+            function state() {
+                var t = root.dataset.theme;
+                return t === 'light' || t === 'dark' ? t : 'system';
             }
-            function paint() { btn.textContent = effective() === 'dark' ? '☀' : '☾'; }
+            function paint() { btn.textContent = GLYPH[state()]; }
             btn.addEventListener('click', function () {
-                var next = effective() === 'dark' ? 'light' : 'dark';
-                document.documentElement.dataset.theme = next;
-                localStorage.setItem('coze-theme', next);
+                var next = NEXT[state()];
+                if (next === 'system') {
+                    root.removeAttribute('data-theme');
+                    localStorage.removeItem('coze-theme');
+                } else {
+                    root.dataset.theme = next;
+                    localStorage.setItem('coze-theme', next);
+                }
                 paint();
             });
             mq.addEventListener('change', paint);
