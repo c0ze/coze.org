@@ -325,7 +325,12 @@
                 var t = root.dataset.theme;
                 return t === 'light' || t === 'dark' ? t : 'system';
             }
-            function paint() { btn.textContent = GLYPH[state()]; }
+            function paint() {
+                var s = state();
+                var now = s === 'system' ? 'system (' + (mq.matches ? 'light' : 'dark') + ')' : s;
+                btn.textContent = GLYPH[s];
+                btn.setAttribute('aria-label', 'Theme: ' + now + '. Switch to ' + NEXT[s]);
+            }
             btn.addEventListener('click', function () {
                 var next = NEXT[state()];
                 if (next === 'system') {
