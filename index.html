@@ -46,14 +46,14 @@
             :root:not([data-theme]) {
                 --bg-color: #f4f2ec;
                 --text-color: #1a1a1a;
-                --accent-color: #777; /* Still grey, still despair */
+                --accent-color: #6a6a6a; /* Still grey, still despair */
             }
         }
 
         [data-theme="light"] {
             --bg-color: #f4f2ec;
             --text-color: #1a1a1a;
-            --accent-color: #777;
+            --accent-color: #6a6a6a;
         }
 
         [data-theme="dark"] {
@@ -97,7 +97,7 @@
 
         .phonetic {
             font-style: italic;
-            opacity: 0.7;
+            color: var(--accent-color);
         }
 
         .actions {
@@ -132,7 +132,7 @@
             font-weight: 400;
             text-transform: uppercase;
             letter-spacing: 3px;
-            opacity: 0.7;
+            color: var(--accent-color);
         }
 
         .meanwhile ul {
@@ -229,7 +229,7 @@
         footer {
             margin-top: 4rem;
             font-size: 0.7rem;
-            opacity: 0.3;
+            color: var(--accent-color);
         }
 
         .theme-toggle {
