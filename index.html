@@ -85,6 +85,13 @@
             text-align: center;
         }
 
+        main { /* same column as body, so the landmark changes nothing visible */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
         h1 {
             font-size: 4rem;
             margin: 0;
@@ -274,49 +281,51 @@
 
     <button class="theme-toggle" type="button" aria-label="Toggle color theme">◐</button>
 
-    <h1>coze.org</h1>
+    <main>
+        <h1>coze.org</h1>
 
-    <div class="definition">
-        <span class="phonetic">/kəʊz/</span> • <em>verb</em><br>
-        1. To converse in a friendly and intimate way.<br>
-        2. To be cozy or intimate with.<br>
-        <br>
-        <small><em>See also: <a href="https://en.wikipedia.org/wiki/Count_Zero">Count Zero</a> (Gibson, 1986).</em></small>
-    </div>
+        <div class="definition">
+            <span class="phonetic">/kəʊz/</span> • <em>verb</em><br>
+            1. To converse in a friendly and intimate way.<br>
+            2. To be cozy or intimate with.<br>
+            <br>
+            <small><em>See also: <a href="https://en.wikipedia.org/wiki/Count_Zero">Count Zero</a> (Gibson, 1986).</em></small>
+        </div>
 
-    <div class="actions">
-        <a class="contact-box" href="https://www.afternic.com/domain/coze.org" rel="nofollow">
-            Buy Now via Afternic
-        </a>
-        <a class="contact-box" href="mailto:inquiry@coze.org?subject=coze.org%20acquisition">
-            Make an Offer
-        </a>
-    </div>
-
-    <section class="meanwhile">
-        <h2>Meanwhile, it hosts</h2>
-        <div class="cards">
-            <a class="card" href="https://dergi.coze.org/">
-                <img src="/img/dergi.webp" width="800" height="420" alt="" loading="lazy">
-                <span class="card-body">
-                    <span class="card-host">dergi.coze.org</span>
-                    Turkish Commodore 64 and Amiga magazines from 1985 on: every issue page by page, every article searchable.
-                </span>
+        <div class="actions">
+            <a class="contact-box" href="https://www.afternic.com/domain/coze.org" rel="nofollow">
+                Buy Now via Afternic
             </a>
-            <a class="card" href="https://retro.coze.org/">
-                <img src="/img/retro.webp" width="800" height="420" alt="" loading="lazy">
-                <span class="card-body">
-                    <span class="card-host">retro.coze.org</span>
-                    RETRO, a monthly Turkish magazine on games, metal, hardware and AI, written by AI in the voice of a 90s print magazine.
-                </span>
+            <a class="contact-box" href="mailto:inquiry@coze.org?subject=coze.org%20acquisition">
+                Make an Offer
             </a>
         </div>
-        <ul>
-            <li><a href="https://zork.coze.org/">zork.coze.org</a> — the classic text adventures, illustrated &amp; narrated</li>
-            <li><a href="https://adarkroom.coze.org/">adarkroom.coze.org</a> — A Dark Room, the minimalist fire-stoking epic</li>
-            <li><a href="https://tsl.coze.org/">tsl.coze.org</a> — The Slimy Lichmummy, a stern roguelike</li>
-        </ul>
-    </section>
+
+        <section class="meanwhile">
+            <h2>Meanwhile, it hosts</h2>
+            <div class="cards">
+                <a class="card" href="https://dergi.coze.org/">
+                    <img src="/img/dergi.webp" width="800" height="420" alt="" loading="lazy">
+                    <span class="card-body">
+                        <span class="card-host">dergi.coze.org</span>
+                        Turkish Commodore 64 and Amiga magazines from 1985 on: every issue page by page, every article searchable.
+                    </span>
+                </a>
+                <a class="card" href="https://retro.coze.org/">
+                    <img src="/img/retro.webp" width="800" height="420" alt="" loading="lazy">
+                    <span class="card-body">
+                        <span class="card-host">retro.coze.org</span>
+                        RETRO, a monthly Turkish magazine on games, metal, hardware and AI, written by AI in the voice of a 90s print magazine.
+                    </span>
+                </a>
+            </div>
+            <ul>
+                <li><a href="https://zork.coze.org/">zork.coze.org</a> — the classic text adventures, illustrated &amp; narrated</li>
+                <li><a href="https://adarkroom.coze.org/">adarkroom.coze.org</a> — A Dark Room, the minimalist fire-stoking epic</li>
+                <li><a href="https://tsl.coze.org/">tsl.coze.org</a> — The Slimy Lichmummy, a stern roguelike</li>
+            </ul>
+        </section>
+    </main>
 
     <footer>
         &copy; 2026. All rights reserved.
