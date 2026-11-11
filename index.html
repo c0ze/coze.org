@@ -31,8 +31,10 @@
     <script>
         // Anti-flash: apply stored theme before first paint; no key means follow the system
         (function () {
-            var t = localStorage.getItem('coze-theme');
-            if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+            try {
+                var t = localStorage.getItem('coze-theme');
+                if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+            } catch (e) { /* storage blocked: follow the system */ }
         })();
     </script>
     <style>
@@ -333,14 +335,13 @@
             }
             btn.addEventListener('click', function () {
                 var next = NEXT[state()];
-                if (next === 'system') {
-                    root.removeAttribute('data-theme');
-                    localStorage.removeItem('coze-theme');
-                } else {
-                    root.dataset.theme = next;
-                    localStorage.setItem('coze-theme', next);
-                }
+                if (next === 'system') root.removeAttribute('data-theme');
+                else root.dataset.theme = next;
                 paint();
+                try {
+                    if (next === 'system') localStorage.removeItem('coze-theme');
+                    else localStorage.setItem('coze-theme', next);
+                } catch (e) { /* storage blocked: the choice lasts until reload */ }
             });
             mq.addEventListener('change', paint);
             paint();
