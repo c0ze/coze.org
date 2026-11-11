@@ -234,10 +234,6 @@
             filter: none;
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            .meanwhile a.card, .card img { transition: none; }
-        }
-
         a {
             text-decoration: none;
             color: inherit;
@@ -274,6 +270,11 @@
 
         body, .contact-box, .theme-toggle {
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body, .contact-box, .theme-toggle,
+            .meanwhile a.card, .card img { transition: none; }
         }
     </style>
 </head>
