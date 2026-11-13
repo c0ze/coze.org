@@ -280,7 +280,7 @@
 </head>
 <body>
 
-    <button class="theme-toggle" type="button" aria-label="Toggle color theme">◐</button>
+    <button class="theme-toggle" type="button" aria-label="Toggle color theme" hidden>◐</button>
 
     <main>
         <h1>coze.org</h1>
@@ -337,6 +337,7 @@
         (function () {
             var root = document.documentElement;
             var btn = document.querySelector('.theme-toggle');
+            btn.hidden = false; // hidden in the markup: without JavaScript it would do nothing
             var mq = window.matchMedia('(prefers-color-scheme: light)');
             var NEXT = { system: 'light', light: 'dark', dark: 'system' };
             var GLYPH = { system: '◐', light: '☀', dark: '☾' };
