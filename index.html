@@ -333,26 +333,31 @@
     </footer>
 
     <script>
-        // Three states: system (no data-theme, no stored key) -> light -> dark -> system
+        // Three states: system (no data-theme, no stored key) -> the opposite of the OS scheme
+        // -> the OS scheme -> system, so the first click always changes what you see
         (function () {
             var root = document.documentElement;
             var btn = document.querySelector('.theme-toggle');
             btn.hidden = false; // hidden in the markup: without JavaScript it would do nothing
             var mq = window.matchMedia('(prefers-color-scheme: light)');
-            var NEXT = { system: 'light', light: 'dark', dark: 'system' };
             var GLYPH = { system: '◐', light: '☀', dark: '☾' };
+            function os() { return mq.matches ? 'light' : 'dark'; }
             function state() {
                 var t = root.dataset.theme;
                 return t === 'light' || t === 'dark' ? t : 'system';
             }
+            function nextOf(s) {
+                var other = os() === 'light' ? 'dark' : 'light';
+                return s === 'system' ? other : s === other ? os() : 'system';
+            }
+            function name(s) { return s === 'system' ? 'system (' + os() + ')' : s; }
             function paint() {
                 var s = state();
-                var now = s === 'system' ? 'system (' + (mq.matches ? 'light' : 'dark') + ')' : s;
                 btn.textContent = GLYPH[s];
-                btn.setAttribute('aria-label', 'Theme: ' + now + '. Switch to ' + NEXT[s]);
+                btn.setAttribute('aria-label', 'Theme: ' + name(s) + '. Switch to ' + name(nextOf(s)));
             }
             btn.addEventListener('click', function () {
-                var next = NEXT[state()];
+                var next = nextOf(state());
                 if (next === 'system') root.removeAttribute('data-theme');
                 else root.dataset.theme = next;
                 paint();
