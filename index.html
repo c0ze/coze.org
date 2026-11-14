@@ -246,6 +246,18 @@
             margin-top: 4rem;
             font-size: 0.7rem;
             color: var(--accent-color);
+            line-height: 1.8;
+        }
+
+        footer a { /* the one way out of the family */
+            text-transform: none;
+            font-size: inherit;
+            font-weight: 400;
+            text-decoration: underline;
+        }
+
+        footer a:hover {
+            color: var(--text-color);
         }
 
         .theme-toggle { /* stays at the top of the page and scrolls away with it; body's 4rem top padding keeps it clear of the h1 */
@@ -331,6 +343,7 @@
     </main>
 
     <footer>
+        Kept by <a href="https://arda.tr/" rel="author">Arda Karaduman</a> until it sells.<br>
         &copy; 2026. All rights reserved.
     </footer>
 
