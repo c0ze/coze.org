@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="dark light">
+    <meta name="color-scheme" content="light dark">
+    <script>
+        // Anti-flash: pin a stored theme before first paint; no stored value means follow the system
+        (function () {
+            try {
+                var t = localStorage.getItem('coze-theme');
+                if (t === 'light' || t === 'dark') document.querySelector('meta[name="color-scheme"]').content = t;
+            } catch (e) { /* storage blocked: follow the system */ }
+        })();
+    </script>
     <title>coze.org - Domain Available for Acquisition</title>
     <meta name="description" content="coze.org - A premium domain available for acquisition. From 'coze': to converse in a friendly and intimate way. Reference: Count Zero (Gibson, 1986)." />
     <meta name="keywords" content="coze.org, domain acquisition, premium domain, Count Zero, William Gibson, cyberpunk" />
     <meta name="author" content="Arda Karaduman" />
 
     <link rel="canonical" href="https://coze.org/">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3Crect%20width='16'%20height='16'%20fill='%230a0a0a'/%3E%3Crect%20x='5'%20y='3'%20width='6'%20height='10'%20fill='%23e0e0e0'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="preload" href="/fonts/press-start-2p-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/ibm-plex-mono-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- The desk scene only shows from 48rem up (see .art), so only wide screens fetch it early and at high priority -->
+    <link rel="preload" href="/img/desk.webp" as="image" type="image/webp" media="(min-width: 48rem)" fetchpriority="high">
 
     <meta property="og:title" content="coze.org" />
     <meta property="og:description" content="Premium domain available for acquisition. 'Coze': to converse in a friendly and intimate way." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://coze.org/" />
+    <meta property="og:image" content="https://coze.org/img/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="COZE.ORG in gold pixel letters between copper bars on a Commodore 64 screen, with a pixel-art desk: a C64, a disk drive and a glass of tea." />
 
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="coze.org" />
     <meta name="twitter:description" content="Premium domain available for acquisition." />
+    <meta name="twitter:image" content="https://coze.org/img/og.png" />
 
     <script type="application/ld+json">
     {
@@ -41,363 +60,654 @@
       ]
     }
     </script>
-    <script>
-        // Anti-flash: apply stored theme before first paint; no key means follow the system
-        (function () {
-            try {
-                var t = localStorage.getItem('coze-theme');
-                if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
-            } catch (e) { /* storage blocked: follow the system */ }
-        })();
-    </script>
     <style>
-        :root {
-            --bg-color: #0a0a0a;
-            --text-color: #e0e0e0;
-            --accent-color: #888; /* Grey, like despair */
-            color-scheme: dark;
+        /* READY.: a C64 screen. Press Start 2P (.ps) is for display and short labels only; sentences are IBM Plex Mono. */
+        @font-face {
+            font-family: "Press Start 2P";
+            src: url("/fonts/press-start-2p-latin-400.woff2") format("woff2");
+            font-weight: 400;
+            font-display: block; /* a pixel wordmark in Courier is worse than a short wait; the file is preloaded */
+        }
+        @font-face {
+            font-family: "IBM Plex Mono";
+            src: url("/fonts/ibm-plex-mono-latin-400.woff2") format("woff2");
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "IBM Plex Mono";
+            src: url("/fonts/ibm-plex-mono-latin-700.woff2") format("woff2");
+            font-weight: 700;
+            font-display: swap;
         }
 
-        @media (prefers-color-scheme: light) {
-            :root:not([data-theme]) {
-                --bg-color: #f4f2ec;
-                --text-color: #1a1a1a;
-                --accent-color: #6a6a6a; /* Still grey, still despair */
-                color-scheme: light;
+        :root {
+            color-scheme: light dark;
+            /* The F7 key pins a scheme by rewriting the color-scheme meta; these map it back into CSS */
+            &:has(> head > meta[name="color-scheme"][content="dark"]) { color-scheme: dark; }
+            &:has(> head > meta[name="color-scheme"][content="light"]) { color-scheme: light; }
+
+            /* light-dark(daylight, the purple screen) */
+            --border: light-dark(#C9C2FF, #7869C4);
+            --screen: light-dark(#F2EFFF, #40318D);
+            --text: light-dark(#40318D, #C9C2FF);
+            --strong: light-dark(#000, #FFF);
+            --link: light-dark(#40318D, #FFD23F);     /* gold is never text on paper */
+            --term: light-dark(#000, #FFD23F);
+            --tag: light-dark(#40318D, #3EE6C8);      /* nor is cyan */
+            --card: light-dark(#FFF, transparent);
+            --rev-bg: light-dark(#40318D, #C9C2FF);   /* reverse video */
+            --rev-fg: light-dark(#F2EFFF, #40318D);
+            --focus: light-dark(#000, #FFF);
+            --rule: #7869C4;
+            --gold: #FFD23F;
+            --cyan: #3EE6C8;
+            --pad: clamp(0.875rem, 3vw, 2rem);
+            --display: "Press Start 2P", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+            --body: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+        }
+
+        /* Browsers without light-dark() get the purple screen */
+        @supports not (color: light-dark(#000, #fff)) {
+            :root {
+                --border: #7869C4; --screen: #40318D; --text: #C9C2FF; --strong: #FFF; --link: #FFD23F; --term: #FFD23F;
+                --tag: #3EE6C8; --card: transparent; --rev-bg: #C9C2FF; --rev-fg: #40318D; --focus: #FFF;
             }
         }
 
-        [data-theme="light"] {
-            --bg-color: #f4f2ec;
-            --text-color: #1a1a1a;
-            --accent-color: #6a6a6a;
-            color-scheme: light;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #0a0a0a;
-            --text-color: #e0e0e0;
-            --accent-color: #888;
-            color-scheme: dark;
-        }
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace; /* Retro terminal vibe */
-            min-height: 100vh;
             margin: 0;
-            padding: 4rem 1rem;
-            box-sizing: border-box;
+            min-height: 100svh;
+            padding: clamp(0.75rem, 2vw, 1.5rem); /* the screen border */
+            background: var(--border);
+            color: var(--text);
+            font: 400 1rem/1.6 var(--body);
+            font-size-adjust: from-font; /* fallbacks take Plex's x-height, so the swap moves less */
+        }
+
+        .screen {
+            max-width: 87rem;
+            margin: 0 auto;
+            background: var(--screen);
+        }
+
+        .ps {
+            font-family: var(--display);
+            font-size-adjust: from-font;
+            font-weight: 400;
+            line-height: 1.6;
+            text-transform: uppercase;
+        }
+
+        .vh { /* for screen readers only */
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip-path: inset(50%);
+            white-space: nowrap;
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--focus);
+            outline-offset: 3px;
+        }
+
+        /* Function keys */
+        .top {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-wrap: wrap;
             align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem 1.5rem;
+            padding: 0.5rem var(--pad);
+        }
+
+        .brand {
+            color: var(--link);
+            font-size: 0.875rem;
+            text-decoration: none;
+        }
+
+        .fkeys {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0 1.75rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-size: 0.6875rem;
+        }
+
+        .fkeys li:has(> [hidden]) { display: none; }
+
+        .fkey {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 2.75rem;
+            padding: 0;
+            border: 0;
+            background: none;
+            color: var(--text);
+            font: inherit;
+            text-transform: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .key {
+            padding: 0.375rem 0.3125rem 0.25rem 0.375rem;
+            background: var(--rev-bg);
+            color: var(--rev-fg);
+        }
+
+        .fkey:hover .key {
+            background: var(--gold);
+            color: #000;
+        }
+
+        /* F7 underlines the scheme on screen; light-dark() keeps that in CSS */
+        .is-light, .is-dark {
+            text-decoration: underline 2px;
+            text-underline-offset: 0.35em;
+        }
+        .is-light { text-decoration-color: light-dark(currentColor, transparent); }
+        .is-dark { text-decoration-color: light-dark(transparent, currentColor); }
+
+        .boot {
+            margin: 0;
+            padding: 0.25rem var(--pad) 0.875rem;
+            font-size: 0.625rem;
+            text-align: center;
+            text-wrap: balance;
+        }
+        .boot span { display: inline-block; } /* wrap between the sentences, not inside one */
+
+        /* Copper bars: hard 2px raster lines, no blending */
+        .bar { height: 14px; }
+        .bar--red { background: linear-gradient(#8C1D0A 0 2px, #FF4D2E 2px 4px, #FF8A2E 4px 6px, #FFE98F 6px 8px, #FF8A2E 8px 10px, #FF4D2E 10px 12px, #8C1D0A 12px); }
+        .bar--cyan { background: linear-gradient(#0B5F55 0 2px, #1FB89E 2px 4px, #3EE6C8 4px 6px, #DFFFF8 6px 8px, #3EE6C8 8px 10px, #1FB89E 10px 12px, #0B5F55 12px); }
+
+        .break { /* the section break: three thin bars */
+            height: 16px;
+            margin: 0;
+            border: 0;
+            background: linear-gradient(#FF4D2E 0 2px, #FF9A2E 2px 4px, transparent 4px 6px, #C9C2FF 6px 10px, transparent 10px 12px, #3EE6C8 12px);
+        }
+
+        .band {
+            margin: 0;
+            padding: 1.25rem 0.5rem 0.75rem;
+            background: #000;
+            font-size: 2rem; /* whole multiples of 8px keep the pixels square */
+            line-height: 1;
             text-align: center;
         }
 
-        main { /* same column as body, so the landmark changes nothing visible */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
+        .wordmark { color: var(--gold); }
+
+        @supports ((background-clip: text) or (-webkit-background-clip: text)) {
+            .wordmark { /* one colour per pixel row of the font's 8-row cell */
+                display: inline-block;
+                background: linear-gradient(#FFF6CF 0 12.5%, #FFEC9C 12.5% 25%, #FFE066 25% 37.5%, #FFD23F 37.5% 50%, #FFC233 50% 62.5%, #FFAE2B 62.5% 75%, #FF9A2E 75%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
         }
 
-        h1 {
-            font-size: 4rem;
-            margin: 0;
-            letter-spacing: -2px;
-            font-weight: 700;
-        }
-
-        .definition {
-            margin-top: 2rem;
-            font-size: 1rem;
-            color: var(--accent-color);
-            max-width: 600px;
-            line-height: 1.6;
-            border-left: 2px solid var(--accent-color);
-            padding-left: 1rem;
-            text-align: left;
-        }
-
-        .definition a {
-            text-decoration: underline;
-        }
-
-        .phonetic {
-            font-style: italic;
-            color: var(--accent-color);
-        }
-
-        .actions {
-            margin-top: 2.5rem;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .contact-box {
-            margin-top: 1.5rem;
-            border: 1px solid var(--text-color);
-            padding: 1rem 2rem;
-            line-height: 1.25; /* the box used to take its height from a 1rem div */
-            transition: all 0.3s ease;
-        }
-
-        .contact-box:hover {
-            background-color: var(--text-color);
-            color: var(--bg-color);
-        }
-
-        .meanwhile {
-            margin-top: 5rem;
-            font-size: 0.85rem;
-            color: var(--accent-color);
-            max-width: 600px;
-        }
-
-        .meanwhile h2 {
-            font-size: 0.85rem;
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--accent-color);
-        }
-
-        .meanwhile ul {
-            list-style: none;
-            margin: 1rem 0 0;
-            padding: 0;
-            line-height: 2;
-        }
-
-        .meanwhile a {
-            text-transform: none;
-            font-size: 0.85rem;
-            text-decoration: underline;
-        }
-
-        .meanwhile a:hover {
-            color: var(--text-color);
-        }
-
-        .cards {
+        /* Definition, the two ways to buy, the desk */
+        .intro {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-            text-align: left;
+            grid-template-areas: "def" "cta";
+            gap: 1.5rem;
+            padding: 1.5rem var(--pad) 1.75rem;
         }
 
-        .meanwhile a.card {
+        .def { grid-area: def; }
+        .def p, .def ol { margin: 0; }
+        .term dfn {
+            margin-right: 0.75rem;
+            color: var(--term);
+            font-size: 1rem;
+            font-style: normal;
+        }
+        .phon { font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; } /* Plex Mono has no ʊ; one font for the whole transcription */
+        .senses {
+            padding: 0.5rem 0 0;
+            color: var(--strong);
+            list-style: decimal inside;
+        }
+        .see a { color: inherit; }
+
+        .cta {
+            grid-area: cta;
+            display: grid;
+            align-content: start;
+            gap: 1.25rem;
+            padding-right: 4px; /* room for the hard shadow */
+        }
+
+        .btn {
             display: flex;
-            flex-direction: column;
-            border: 1px solid var(--accent-color);
+            align-items: center;
+            justify-content: center;
+            min-height: 3.5rem;
+            padding: 0.875rem 1rem 0.625rem;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0 #000;
+            font-size: 0.75rem;
+            text-align: center;
             text-decoration: none;
-            font-weight: 400;
-            color: var(--accent-color);
-            transition: border-color 0.3s ease, color 0.3s ease;
         }
+        .btn--gold { background: var(--gold); color: #000; }
+        .btn--line { background: var(--card); border-color: var(--text); color: var(--text); }
+        .btn:hover { translate: 2px 2px; box-shadow: 2px 2px 0 #000; }
+        .btn:active { translate: 4px 4px; box-shadow: none; }
 
-        .card img {
-            display: block;
+        .art {
+            grid-area: art;
+            display: none;
             width: 100%;
             height: auto;
-            aspect-ratio: 40 / 21;
-            object-fit: cover;
-            border-bottom: 1px solid var(--accent-color);
-            filter: grayscale(1) contrast(1.05);
-            transition: filter 0.3s ease;
+            border: 3px solid #000;
         }
 
-        .card-body {
-            padding: 0.9rem 1rem 1rem;
-            line-height: 1.5;
+        /* The directory */
+        .dir { padding: 0.875rem var(--pad) 1.25rem; }
+        .basic, .free, .ready {
+            margin: 0;
+            font-size: 0.75rem;
+        }
+        .free { margin-top: 0.375rem; }
+
+        .dir-head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.625rem 1rem;
+            margin: 0.375rem 0 0.75rem;
+        }
+        .disk {
+            flex: 0 1 29rem;
+            display: flex;
+            margin: 0;
+            padding: 0.375rem 0.5rem 0.25rem;
+            overflow: hidden;
+            background: var(--rev-bg);
+            color: var(--rev-fg);
+            font-size: 0.75rem;
+            white-space: pre;
+        }
+        .disk .pad { flex: 0 1 8em; } /* a 1541 pads the disk name to 16 characters; a narrow screen can't afford all of them */
+        .dir h2 {
+            margin: 0;
+            padding: 0.5rem 0.75rem 0.375rem;
+            background: var(--gold);
+            color: #000;
+            font-size: 0.6875rem;
         }
 
-        .card-host {
-            display: block;
-            color: var(--text-color);
+        .files {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .mags {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+            gap: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* One entry: blocks, name and type on the first line, then the address, then the description */
+        .file {
+            position: relative;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            grid-template-areas: "blk name type" "host host host" "desc desc desc";
+            align-items: baseline;
+            gap: 0.125rem 0.75rem;
+            padding: 0.625rem 0;
+        }
+        .blk { grid-area: blk; }
+        .name { grid-area: name; }
+        .type { grid-area: type; color: var(--tag); }
+        .host { grid-area: host; justify-self: start; }
+        .desc { grid-area: desc; }
+        .blk, .name { color: var(--strong); }
+        .blk, .name, .type { font-size: 0.75rem; }
+
+        .host {
+            color: var(--link);
             font-weight: 700;
-            font-size: 0.95rem;
-            margin-bottom: 0.35rem;
-        }
-
-        .card-host::after {
-            content: " \2192";
-        }
-
-        .meanwhile a.card:hover,
-        .meanwhile a.card:focus-visible {
-            border-color: var(--text-color);
-            color: var(--text-color);
-        }
-
-        .meanwhile a.card:focus-visible {
-            outline: 2px solid var(--text-color);
-            outline-offset: 2px;
-        }
-
-        .card:hover img,
-        .card:focus-visible img {
-            filter: none;
-        }
-
-        a {
             text-decoration: none;
-            color: inherit;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 0.9rem;
         }
-
-        footer {
-            margin-top: 4rem;
-            font-size: 0.7rem;
-            color: var(--accent-color);
-            line-height: 1.8;
+        .host::after { /* the whole entry is the link's target */
+            content: "";
+            position: absolute;
+            inset: 0;
         }
-
-        footer a { /* the one way out of the family */
-            text-transform: none;
-            font-size: inherit;
-            font-weight: 400;
-            text-decoration: underline;
-        }
-
-        footer a:hover {
-            color: var(--text-color);
-        }
-
-        footer a:focus-visible {
-            outline: 2px solid var(--text-color);
+        .host:focus-visible { outline: none; }
+        .file:has(.host:focus-visible) {
+            outline: 3px solid var(--focus);
             outline-offset: 2px;
         }
 
-        .theme-toggle { /* stays at the top of the page and scrolls away with it; body's 4rem top padding keeps it clear of the h1 */
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: transparent;
-            border: 1px solid var(--accent-color);
-            color: var(--text-color);
-            font-family: inherit;
-            font-size: 1rem;
-            line-height: 1;
-            padding: 0.5rem 0.7rem;
+        .file:hover { /* the cursor bar */
+            background: var(--rev-bg);
+            color: var(--rev-fg);
+        }
+        .file:hover :is(.blk, .name, .type, .host) { color: inherit; }
+
+        .mags .file {
+            padding: 0.75rem 0.875rem 0.875rem;
+            border: 2px solid var(--rule);
+            background: var(--card);
+        }
+        .mags .file:hover { background: var(--rev-bg); }
+        .mags :is(.blk, .name) { font-size: 0.875rem; }
+
+        .progs .file + .file { border-top: 1px solid var(--rule); }
+
+        .cursor {
+            display: inline-block;
+            width: 0.875em;
+            height: 0.875em;
+            margin-left: 0.25em;
+            background: currentColor;
+            vertical-align: -0.0625em;
+        }
+
+        /* Scrolltext */
+        .scroll {
+            display: flex;
+            align-items: center;
+            background: #000;
+            color: var(--cyan);
+            font-size: 0.75rem;
+        }
+        .scroll-view {
+            flex: 1;
+            overflow: hidden;
+        }
+        .scroll-track {
+            width: max-content;
+            margin: 0;
+            padding: 0.75rem var(--pad) 0.5rem;
+            white-space: pre;
+        }
+        .runstop {
+            display: none;
+            margin-right: 0.5rem;
+            padding: 0.375rem 0.375rem 0.25rem 0.5rem;
+            border: 2px solid #C9C2FF;
+            color: #C9C2FF;
+            font-size: 0.625rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+        }
+        .runstop:has(:checked) {
+            background: #C9C2FF;
+            color: #000;
+        }
+        .runstop:has(:focus-visible) {
+            outline: 3px solid #FFF;
+            outline-offset: 2px;
         }
 
-        .theme-toggle:hover {
-            background-color: var(--text-color);
-            color: var(--bg-color);
+        @media (prefers-reduced-motion: no-preference) {
+            .scroll-track {
+                padding-inline: 0;
+                animation: scroll 60s linear infinite;
+            }
+            .scroll-track::after { content: attr(data-loop) attr(data-loop) attr(data-loop); } /* four copies, moved by one */
+            .cursor { animation: blink 1s steps(1) infinite; }
+            .runstop { display: block; }
+            :root:has(#runstop:checked) .scroll-track { animation-play-state: paused; }
+            :root:has(#runstop:checked) .cursor { animation: none; }
+        }
+        @keyframes scroll { to { translate: -25% 0; } }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .foot {
+            margin: 0;
+            padding: 0.75rem var(--pad) 1rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+        .foot a { color: inherit; }
+
+        /* Phone: no brand (the wordmark is right below) and the function keys become a 2 x 2 grid of key-caps */
+        @media (max-width: 39.99rem) {
+            .top { padding-top: 0.875rem; }
+            .brand { display: none; }
+            .top nav { flex: 1; }
+            .fkeys {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+                font-size: 0.625rem;
+            }
+            .fkey {
+                width: 100%;
+                padding: 0 0.375rem;
+                border: 2px solid var(--rule);
+            }
         }
 
-        body, .contact-box, .theme-toggle {
-            transition: background-color 0.3s ease, color 0.3s ease;
+        @media (max-width: 22.49rem) { /* too narrow for two equal columns: each key is as wide as its label needs */
+            .fkeys { display: flex; }
+            .fkeys li { flex: 1 1 auto; }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            body, .contact-box, .theme-toggle,
-            .meanwhile a.card, .card img { transition: none; }
+        @media (min-width: 30rem) {
+            .band { font-size: 2.5rem; }
+        }
+
+        @media (min-width: 40rem) {
+            .boot { font-size: 0.75rem; }
+            .file {
+                grid-template-columns: auto auto 1fr auto;
+                grid-template-areas: "blk name type host" "desc desc desc desc";
+                column-gap: 1rem;
+            }
+            .host { justify-self: end; }
+            .mags .name { min-width: 9rem; }
+        }
+
+        @media (min-width: 48rem) {
+            .band { padding: 1.5rem 0.5rem 1rem; font-size: 4rem; }
+            .intro {
+                grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+                grid-template-areas: "def art" "cta art";
+                column-gap: 2rem;
+            }
+            .art { display: block; align-self: start; }
+        }
+
+        @media (min-width: 72rem) {
+            .progs .file { /* one line per program, as LIST prints it */
+                grid-template-columns: 2rem 9.5rem 3rem 11.5rem 1fr;
+                grid-template-areas: "blk name type host desc";
+                margin: 0 -0.5rem;
+                padding: 0.1875rem 0.5rem;
+            }
+            .progs .file + .file { border-top: 0; }
+            .progs .host { justify-self: start; }
+            .band { font-size: 5rem; }
+            .intro {
+                grid-template-columns: minmax(0, 1.3fr) minmax(21rem, 1fr) minmax(0, 15.5rem); /* 21rem keeps "F3: Buy now via Afternic" on one line */
+                grid-template-areas: "def cta art";
+                column-gap: 2.5rem;
+            }
+        }
+
+        @media (forced-colors: active) {
+            .wordmark {
+                background: none;
+                -webkit-text-fill-color: currentColor;
+            }
+            .key, .disk, .dir h2 { border: 1px solid; }
         }
     </style>
 </head>
 <body>
 
-    <button class="theme-toggle" type="button" aria-label="Toggle color theme" hidden>◐</button>
+<div class="screen">
+    <header class="top">
+        <a class="brand ps" href="/">coze.org</a>
+        <nav aria-label="Function keys">
+            <ul class="fkeys ps">
+                <li><a class="fkey" href="#directory"><span class="key" aria-hidden="true">F1</span> Directory</a></li>
+                <li><a class="fkey" href="https://www.afternic.com/domain/coze.org" rel="nofollow"><span class="key" aria-hidden="true">F3</span> Buy</a></li>
+                <li><a class="fkey" href="mailto:inquiry@coze.org?subject=coze.org%20acquisition"><span class="key" aria-hidden="true">F5</span> Offer</a></li>
+                <li><button class="fkey" id="theme" type="button" hidden><span class="key" aria-hidden="true">F7</span> <span aria-hidden="true"><span class="is-light">Light</span>/<span class="is-dark">Dark</span></span></button></li>
+            </ul>
+        </nav>
+    </header>
 
     <main>
-        <h1>coze.org</h1>
+        <p class="boot ps">**** coze.org 64 BASIC V2 ****<br><span>Registered 2004.</span> <span>38911 BASIC bytes free.</span></p>
 
-        <div class="definition">
-            <span class="phonetic">/kəʊz/</span> • <em>verb</em><br>
-            1. To converse in a friendly and intimate way.<br>
-            2. To be cozy or intimate with.<br>
-            <br>
-            <small><em>See also: <a href="https://en.wikipedia.org/wiki/Count_Zero">Count Zero</a> (Gibson, 1986).</em></small>
-        </div>
+        <div class="bar bar--red"></div>
+        <h1 class="band ps"><span class="wordmark">coze.org</span></h1>
+        <div class="bar bar--cyan"></div>
 
-        <div class="actions">
-            <a class="contact-box" href="https://www.afternic.com/domain/coze.org" rel="nofollow">
-                Buy Now via Afternic
-            </a>
-            <a class="contact-box" href="mailto:inquiry@coze.org?subject=coze.org%20acquisition">
-                Make an Offer
-            </a>
-        </div>
-
-        <section class="meanwhile">
-            <h2>Meanwhile, it hosts</h2>
-            <div class="cards">
-                <a class="card" href="https://dergi.coze.org/" hreflang="tr">
-                    <img src="/img/dergi.webp" width="800" height="420" alt="" loading="lazy">
-                    <span class="card-body">
-                        <span class="card-host">dergi.coze.org</span>
-                        Turkish Commodore 64 and Amiga magazines from 1985 on: every issue page by page, every article searchable.
-                    </span>
-                </a>
-                <a class="card" href="https://retro.coze.org/" hreflang="tr">
-                    <img src="/img/retro.webp" width="800" height="420" alt="" loading="lazy">
-                    <span class="card-body">
-                        <span class="card-host">retro.coze.org</span>
-                        RETRO, a monthly Turkish magazine on games, metal, hardware and AI, written by AI in the voice of a 90s print magazine.
-                    </span>
-                </a>
+        <div class="intro">
+            <div class="def">
+                <p class="term"><dfn class="ps">coze</dfn><span class="phon" lang="en-fonipa">/kəʊz/</span>, verb</p>
+                <ol class="senses">
+                    <li>To converse in a friendly and intimate way.</li>
+                    <li>To be cozy or intimate with.</li>
+                </ol>
+                <p class="see">See also: <a href="https://en.wikipedia.org/wiki/Count_Zero">Count Zero</a> (Gibson, 1986).</p>
             </div>
-            <ul>
-                <li><a href="https://zork.coze.org/">zork.coze.org</a> — the classic text adventures, illustrated &amp; narrated</li>
-                <li><a href="https://adarkroom.coze.org/">adarkroom.coze.org</a> — A Dark Room, the minimalist fire-stoking epic</li>
-                <li><a href="https://tsl.coze.org/">tsl.coze.org</a> — The Slimy Lichmummy, a stern roguelike</li>
-                <li><a href="https://gage.coze.org/">gage.coze.org</a> — Gage, board games played one reply at a time</li>
-                <li><a href="https://tracker.coze.org/">tracker.coze.org</a> — cozy-tracker, adaptive game music in kilobytes</li>
+
+            <div class="cta">
+                <a class="btn btn--gold ps" href="https://www.afternic.com/domain/coze.org" rel="nofollow">F3: Buy now via Afternic</a>
+                <a class="btn btn--line ps" href="mailto:inquiry@coze.org?subject=coze.org%20acquisition">F5: Make an offer</a>
+            </div>
+
+            <img class="art" src="/img/desk.webp" width="800" height="537" decoding="async"
+                 alt="Pixel art: a Commodore 64, a 1541 disk drive and a small purple monitor on a desk at dusk, a stack of magazines and a glass of tea beside them, a striped sunset over a city skyline in the window.">
+        </div>
+
+        <hr class="break">
+
+        <section class="dir" id="directory" aria-labelledby="hosts">
+            <p class="basic ps" aria-hidden="true">LOAD"$",8<br>LIST</p>
+            <div class="dir-head">
+                <p class="disk ps" aria-hidden="true"><span>0 "coze.org</span><span class="pad"></span><span>" 04 2A</span></p>
+                <h2 class="ps" id="hosts">Meanwhile, it hosts</h2>
+            </div>
+
+            <!-- Every live subdomain once, by host name. A new one also gets a hasPart entry above. -->
+            <ul class="files mags">
+                <li class="file">
+                    <span class="blk ps" aria-hidden="true">85</span>
+                    <span class="name ps" aria-hidden="true">"dergi"</span>
+                    <span class="type ps" aria-hidden="true">MAG</span>
+                    <a class="host" href="https://dergi.coze.org/" hreflang="tr">dergi.coze.org</a>
+                    <span class="desc">Turkish Commodore 64 and Amiga magazines from 1985 on: every issue page by page, every article searchable.</span>
+                </li>
+                <li class="file">
+                    <span class="blk ps" aria-hidden="true">64</span>
+                    <span class="name ps" aria-hidden="true">"retro"</span>
+                    <span class="type ps" aria-hidden="true">MAG</span>
+                    <a class="host" href="https://retro.coze.org/" hreflang="tr">retro.coze.org</a>
+                    <span class="desc">RETRO, a monthly Turkish magazine on games, metal, hardware and AI, written by AI in the voice of a 90s print magazine.</span>
+                </li>
             </ul>
+            <ul class="files progs">
+                <li class="file">
+                    <span class="blk ps" aria-hidden="true">38</span>
+                    <span class="name ps" aria-hidden="true">"zork"</span>
+                    <span class="type ps" aria-hidden="true">PRG</span>
+                    <a class="host" href="https://zork.coze.org/">zork.coze.org</a>
+                    <span class="desc">The classic text adventures, illustrated and narrated.</span>
+                </li>
+                <li class="file">
+                    <span class="blk ps" aria-hidden="true">12</span>
+                    <span class="name ps" aria-hidden="true">"adarkroom"</span>
+                    <span class="type ps" aria-hidden="true">PRG</span>
+                    <a class="host" href="https://adarkroom.coze.org/">adarkroom.coze.org</a>
+                    <span class="desc">A Dark Room, the minimalist fire-stoking epic.</span>
+                </li>
+                <li class="file">
+                    <span class="blk ps" aria-hidden="true">27</span>
+                    <span class="name ps" aria-hidden="true">"tsl"</span>
+                    <span class="type ps" aria-hidden="true">PRG</span>
+                    <a class="host" href="https://tsl.coze.org/">tsl.coze.org</a>
+                    <span class="desc">The Slimy Lichmummy, a stern roguelike.</span>
+                </li>
+                <li class="file">
+                    <span class="blk ps" aria-hidden="true">9</span>
+                    <span class="name ps" aria-hidden="true">"gage"</span>
+                    <span class="type ps" aria-hidden="true">PRG</span>
+                    <a class="host" href="https://gage.coze.org/">gage.coze.org</a>
+                    <span class="desc">Gage, board games played one reply at a time.</span>
+                </li>
+                <li class="file">
+                    <span class="blk ps" aria-hidden="true">4</span>
+                    <span class="name ps" aria-hidden="true">"tracker"</span>
+                    <span class="type ps" aria-hidden="true">PRG</span>
+                    <a class="host" href="https://tracker.coze.org/">tracker.coze.org</a>
+                    <span class="desc">cozy-tracker, adaptive game music in kilobytes.</span>
+                </li>
+            </ul>
+
+            <!-- 664 blocks on a 1541 disk, less the seven entries -->
+            <p class="free ps" aria-hidden="true">425 blocks free.</p>
+            <p class="ready ps" aria-hidden="true">Ready.<span class="cursor"></span></p>
         </section>
     </main>
 
+    <div class="scroll ps">
+        <div class="scroll-view" aria-hidden="true">
+            <p class="scroll-track" data-loop="...coze.org... a four-letter dictionary word, registered 2004... for sale... meanwhile, it hosts...   ">...coze.org... a four-letter dictionary word, registered 2004... for sale... meanwhile, it hosts...   </p>
+        </div>
+        <label class="runstop"><input class="vh" id="runstop" type="checkbox"><span aria-hidden="true">Run/Stop</span><span class="vh">Pause the animation</span></label>
+    </div>
+
     <footer>
-        Kept by <a href="https://arda.tr/" rel="author">Arda Karaduman</a> until it sells.<br>
-        &copy; 2026. All rights reserved.
+        <p class="foot">Kept by <a href="https://arda.tr/" rel="author">Arda Karaduman</a> until it sells. (c) 2026.</p>
     </footer>
+</div>
 
     <script>
-        // Three states: system (no data-theme, no stored key) -> the opposite of the OS scheme
-        // -> the OS scheme -> system, so the first click always changes what you see
+        // F7: two states. Following the system (nothing stored), or pinned to the scheme the system isn't showing.
         (function () {
-            var root = document.documentElement;
-            var btn = document.querySelector('.theme-toggle');
-            btn.hidden = false; // hidden in the markup: without JavaScript it would do nothing
-            var mq = window.matchMedia('(prefers-color-scheme: light)');
-            var GLYPH = { system: '◐', light: '☀', dark: '☾' };
-            function os() { return mq.matches ? 'light' : 'dark'; }
-            function state() {
-                var t = root.dataset.theme;
-                return t === 'light' || t === 'dark' ? t : 'system';
-            }
-            function nextOf(s) {
-                var other = os() === 'light' ? 'dark' : 'light';
-                return s === 'system' ? other : s === other ? os() : 'system';
-            }
-            function name(s) { return s === 'system' ? 'system (' + os() + ')' : s; }
+            var KEY = 'coze-theme';
+            var meta = document.querySelector('meta[name="color-scheme"]');
+            var btn = document.getElementById('theme');
+            var mq = window.matchMedia('(prefers-color-scheme: dark)');
+            function system() { return mq.matches ? 'dark' : 'light'; }
+            function shown() { return meta.content === 'light' || meta.content === 'dark' ? meta.content : system(); }
             function paint() {
-                var s = state();
-                btn.textContent = GLYPH[s];
-                btn.setAttribute('aria-label', 'Theme: ' + name(s) + '. Switch to ' + name(nextOf(s)));
+                btn.setAttribute('aria-label', 'Theme: ' + shown() + '. Switch to ' + (shown() === 'dark' ? 'light' : 'dark'));
             }
-            btn.addEventListener('click', function () {
-                var next = nextOf(state());
-                if (next === 'system') root.removeAttribute('data-theme');
-                else root.dataset.theme = next;
+            function apply(pinned) {
+                meta.content = pinned === 'light' || pinned === 'dark' ? pinned : 'light dark';
                 paint();
+            }
+            btn.hidden = false; // hidden in the markup: without JavaScript it would do nothing
+            btn.addEventListener('click', function () {
+                var target = shown() === 'dark' ? 'light' : 'dark';
+                var pin = target !== system(); // back to what the system shows means "undo": follow it again
+                apply(pin ? target : null);
                 try {
-                    if (next === 'system') localStorage.removeItem('coze-theme');
-                    else localStorage.setItem('coze-theme', next);
+                    if (pin) localStorage.setItem(KEY, target);
+                    else localStorage.removeItem(KEY);
                 } catch (e) { /* storage blocked: the choice lasts until reload */ }
             });
             mq.addEventListener('change', paint);
+            window.addEventListener('storage', function (e) { // another tab changed it
+                if (e.key === KEY || e.key === null) apply(e.newValue);
+            });
             paint();
         })();
     </script>
