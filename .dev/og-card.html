@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>coze.org social card (source of img/og.png)</title>
+    <!--
+        Not served: GitHub Pages skips dot-folders. This is the 1200x630 card and, with ?icon in the address, the 180px touch icon.
+        Render from the repo root while a static server runs there (python3 -m http.server 8378):
+          google-chrome-stable --headless=new --hide-scrollbars --force-device-scale-factor=1 --virtual-time-budget=5000 \
+            --window-size=1200,630 --screenshot=img/og.png http://localhost:8378/.dev/og-card.html
+          google-chrome-stable --headless=new --hide-scrollbars --force-device-scale-factor=1 --virtual-time-budget=5000 \
+            --window-size=180,180 --screenshot=apple-touch-icon.png "http://localhost:8378/.dev/og-card.html?icon"
+    -->
+    <style>
+        @font-face {
+            font-family: "Press Start 2P";
+            src: url("/fonts/press-start-2p-latin-400.woff2") format("woff2");
+        }
+        @font-face {
+            font-family: "IBM Plex Mono";
+            src: url("/fonts/ibm-plex-mono-latin-400.woff2") format("woff2");
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; background: #7869C4; }
+        .ps { font-family: "Press Start 2P", monospace; text-transform: uppercase; }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            width: 1200px;
+            height: 630px;
+            border: 20px solid #7869C4;
+            background: #40318D;
+            color: #C9C2FF;
+        }
+        .boot {
+            display: flex;
+            justify-content: space-between;
+            padding: 28px 40px 20px;
+            font-size: 16px;
+        }
+        .bar { flex: none; height: 14px; }
+        .bar--red { background: linear-gradient(#8C1D0A 0 2px, #FF4D2E 2px 4px, #FF8A2E 4px 6px, #FFE98F 6px 8px, #FF8A2E 8px 10px, #FF4D2E 10px 12px, #8C1D0A 12px); }
+        .bar--cyan { background: linear-gradient(#0B5F55 0 2px, #1FB89E 2px 4px, #3EE6C8 4px 6px, #DFFFF8 6px 8px, #3EE6C8 8px 10px, #1FB89E 10px 12px, #0B5F55 12px); }
+        .band {
+            display: flex;
+            align-items: center;
+            gap: 56px;
+            padding: 30px 40px 26px;
+            background: #000;
+        }
+        .mark { width: 96px; height: 96px; }
+        .wordmark {
+            padding-top: 12px; /* the font's cell is empty on its bottom row */
+            background: linear-gradient(#FFF6CF 0 12.5%, #FFEC9C 12.5% 25%, #FFE066 25% 37.5%, #FFD23F 37.5% 50%, #FFC233 50% 62.5%, #FFAE2B 62.5% 75%, #FF9A2E 75%) 0 12px / 100% 96px no-repeat;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 96px;
+            line-height: 1;
+        }
+        .body {
+            flex: 1;
+            display: flex;
+            align-items: stretch;
+            gap: 40px;
+            padding: 32px 40px;
+        }
+        .text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font: 400 32px/1.35 "IBM Plex Mono", monospace;
+            color: #FFF;
+        }
+        .text p { margin: 0; }
+        .text b { color: #FFD23F; font-weight: 400; }
+        .phon { font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; }
+        .ready { color: #C9C2FF; font-size: 20px; }
+        .cursor {
+            display: inline-block;
+            width: 0.875em;
+            height: 0.875em;
+            margin-left: 0.25em;
+            background: currentColor;
+            vertical-align: -0.0625em;
+        }
+        .art {
+            flex: none;
+            align-self: center;
+            width: 432px;
+            height: 290px;
+            border: 3px solid #000;
+        }
+
+        /* ?icon: the mark at 128px on a black 180px tile, so iOS's rounded corners never touch the gold border */
+        .icon { display: none; }
+        :root.icon-only, :root.icon-only body { background: #000; }
+        .icon-only .card { display: none; }
+        .icon-only .icon {
+            display: block;
+            width: 128px;
+            height: 128px;
+            margin: 26px;
+        }
+    </style>
+    <script>
+        if (location.search === '?icon') document.documentElement.className = 'icon-only';
+    </script>
+</head>
+<body>
+    <div class="card">
+        <div class="boot ps"><span>**** coze.org 64 BASIC V2 ****</span><span>Registered 2004.</span></div>
+        <div class="bar bar--red"></div>
+        <div class="band">
+            <img class="mark" src="/favicon.svg" alt="">
+            <div class="wordmark ps">coze.org</div>
+        </div>
+        <div class="bar bar--cyan"></div>
+        <div class="body">
+            <div class="text">
+                <p><b>coze <span class="phon">/kəʊz/</span> verb.</b> A four-letter .org, registered 2004. Meanwhile, it hosts.</p>
+                <p class="ready ps">Ready.<span class="cursor"></span></p>
+            </div>
+            <img class="art" src="/img/desk.webp" alt="">
+        </div>
+    </div>
+    <img class="icon" src="/favicon.svg" alt="">
+</body>
+</html>

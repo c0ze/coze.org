@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- The coze.org mark: a gold C on a black key-cap, one gold border. The C is the Press Start 2P glyph, one font pixel per unit. -->
+  <path fill="#FFD23F" d="M0 0h16v16H0z"/>
+  <path fill="#000" d="M1 1h14v14H1z"/>
+  <path fill="#FFD23F" d="M6 4h4v1H6zM5 5h2v1H5zM9 5h2v1H9zM4 6h2v3H4zM5 9h2v1H5zM9 9h2v1H9zM6 10h4v1H6z"/>
+</svg>
