@@ -3,119 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="dark light">
+    <meta name="color-scheme" content="light dark">
     <meta name="robots" content="noindex">
-    <title>Not found - coze.org</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3Crect%20width='16'%20height='16'%20fill='%230a0a0a'/%3E%3Crect%20x='5'%20y='3'%20width='6'%20height='10'%20fill='%23e0e0e0'/%3E%3C/svg%3E">
     <script>
-        // Anti-flash: apply stored theme before first paint; no key means follow the system
+        // Anti-flash: pin a stored theme before first paint; no stored value means follow the system
         (function () {
             try {
                 var t = localStorage.getItem('coze-theme');
-                if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+                if (t === 'light' || t === 'dark') document.querySelector('meta[name="color-scheme"]').content = t;
             } catch (e) { /* storage blocked: follow the system */ }
         })();
     </script>
+    <title>Not found - coze.org</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="preload" href="/fonts/press-start-2p-latin-400.woff2" as="font" type="font/woff2" crossorigin>
     <style>
-        /* Served at any wrong path: keep every URL root-absolute */
-        :root {
-            --bg-color: #0a0a0a;
-            --text-color: #e0e0e0;
-            --accent-color: #888; /* Grey, like despair */
-            color-scheme: dark;
+        /* Served at any wrong path: keep every URL root-absolute. The look is index.html's, cut down to what this page uses. */
+        @font-face {
+            font-family: "Press Start 2P";
+            src: url("/fonts/press-start-2p-latin-400.woff2") format("woff2");
+            font-weight: 400;
+            font-display: block;
+        }
+        @font-face {
+            font-family: "IBM Plex Mono";
+            src: url("/fonts/ibm-plex-mono-latin-400.woff2") format("woff2");
+            font-weight: 400;
+            font-display: swap;
         }
 
-        @media (prefers-color-scheme: light) {
-            :root:not([data-theme]) {
-                --bg-color: #f4f2ec;
-                --text-color: #1a1a1a;
-                --accent-color: #6a6a6a; /* Still grey, still despair */
-                color-scheme: light;
+        :root {
+            color-scheme: light dark;
+            &:has(> head > meta[name="color-scheme"][content="dark"]) { color-scheme: dark; }
+            &:has(> head > meta[name="color-scheme"][content="light"]) { color-scheme: light; }
+
+            --border: light-dark(#C9C2FF, #7869C4);
+            --screen: light-dark(#F2EFFF, #40318D);
+            --text: light-dark(#40318D, #C9C2FF);
+            --strong: light-dark(#000, #FFF);
+            --link: light-dark(#40318D, #FFD23F);
+            --rev-bg: light-dark(#40318D, #C9C2FF);
+            --rev-fg: light-dark(#F2EFFF, #40318D);
+            --focus: light-dark(#000, #FFF);
+            --gold: #FFD23F;
+            --pad: clamp(0.875rem, 3vw, 2rem);
+            --display: "Press Start 2P", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+            --body: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+        }
+
+        @supports not (color: light-dark(#000, #fff)) {
+            :root {
+                --border: #7869C4; --screen: #40318D; --text: #C9C2FF; --strong: #FFF; --link: #FFD23F;
+                --rev-bg: #C9C2FF; --rev-fg: #40318D; --focus: #FFF;
             }
         }
 
-        [data-theme="light"] {
-            --bg-color: #f4f2ec;
-            --text-color: #1a1a1a;
-            --accent-color: #6a6a6a;
-            color-scheme: light;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #0a0a0a;
-            --text-color: #e0e0e0;
-            --accent-color: #888;
-            color-scheme: dark;
-        }
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace; /* Retro terminal vibe */
-            min-height: 100vh;
             margin: 0;
-            padding: 4rem 1rem;
-            box-sizing: border-box;
+            min-height: 100svh;
+            padding: clamp(0.75rem, 2vw, 1.5rem);
+            background: var(--border);
+            color: var(--text);
+            font: 400 1rem/1.6 var(--body);
+            font-size-adjust: from-font;
+        }
+
+        .screen {
+            max-width: 32rem;
+            margin: 0 auto;
+            background: var(--screen);
+        }
+
+        .ps {
+            font-family: var(--display);
+            font-size-adjust: from-font;
+            font-weight: 400;
+            line-height: 1.6;
+            text-transform: uppercase;
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--focus);
+            outline-offset: 3px;
+        }
+
+        .top {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-wrap: wrap;
             align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem 1.5rem;
+            padding: 0.5rem var(--pad);
+        }
+        .brand {
+            color: var(--link);
+            font-size: 0.875rem;
+            text-decoration: none;
+        }
+        .fkey {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 2.75rem;
+            color: var(--text);
+            font-size: 0.625rem;
+            text-decoration: none;
+        }
+        .key {
+            padding: 0.375rem 0.3125rem 0.25rem 0.375rem;
+            background: var(--rev-bg);
+            color: var(--rev-fg);
+        }
+        .fkey:hover .key {
+            background: var(--gold);
+            color: #000;
+        }
+
+        .bar { height: 14px; }
+        .bar--red { background: linear-gradient(#8C1D0A 0 2px, #FF4D2E 2px 4px, #FF8A2E 4px 6px, #FFE98F 6px 8px, #FF8A2E 8px 10px, #FF4D2E 10px 12px, #8C1D0A 12px); }
+        .bar--cyan { background: linear-gradient(#0B5F55 0 2px, #1FB89E 2px 4px, #3EE6C8 4px 6px, #DFFFF8 6px 8px, #3EE6C8 8px 10px, #1FB89E 10px 12px, #0B5F55 12px); }
+        .break {
+            height: 16px;
+            margin: 0;
+            border: 0;
+            background: linear-gradient(#FF4D2E 0 2px, #FF9A2E 2px 4px, transparent 4px 6px, #C9C2FF 6px 10px, transparent 10px 12px, #3EE6C8 12px);
+        }
+
+        .band {
+            margin: 0;
+            padding: 1.5rem 0.5rem 1rem;
+            background: #000;
+            font-size: 4rem;
+            line-height: 1;
+            text-align: center;
+        }
+        .wordmark { color: var(--gold); }
+        @supports ((background-clip: text) or (-webkit-background-clip: text)) {
+            .wordmark {
+                display: inline-block;
+                background: linear-gradient(#FFF6CF 0 12.5%, #FFEC9C 12.5% 25%, #FFE066 25% 37.5%, #FFD23F 37.5% 50%, #FFC233 50% 62.5%, #FFAE2B 62.5% 75%, #FF9A2E 75%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+
+        .msg { padding: 1.5rem var(--pad) 2.5rem; }
+        .msg p { margin: 0 0 1rem; }
+        .basic, .ready { font-size: 0.75rem; }
+        .error {
+            color: var(--strong);
+            font-size: 0.875rem;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 0.875em;
+            height: 0.875em;
+            margin-left: 0.25em;
+            background: currentColor;
+            vertical-align: -0.0625em;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .cursor { animation: blink 1s steps(1) 5; } /* five blinks, then it holds still: nothing here runs long enough to need a stop key */
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3.5rem;
+            margin: 1.5rem 4px 0 0;
+            padding: 0.875rem 1rem 0.625rem;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0 #000;
+            background: var(--gold);
+            color: #000;
+            font-size: 0.75rem;
+            text-align: center;
+            text-decoration: none;
+        }
+        .btn:hover { translate: 2px 2px; box-shadow: 2px 2px 0 #000; }
+        .btn:active { translate: 4px 4px; box-shadow: none; }
+
+        .foot {
+            margin: 0;
+            padding: 0.75rem var(--pad) 1rem;
+            font-size: 0.875rem;
             text-align: center;
         }
 
-        main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-
-        h1 {
-            font-size: 4rem;
-            margin: 0;
-            letter-spacing: -2px;
-            font-weight: 700;
-        }
-
-        p {
-            margin: 2rem 0 0;
-            font-size: 1rem;
-            color: var(--accent-color);
-            max-width: 600px;
-            line-height: 1.6;
-            border-left: 2px solid var(--accent-color);
-            padding-left: 1rem;
-            text-align: left;
-        }
-
-        a {
-            margin-top: 2.5rem;
-            border: 1px solid var(--text-color);
-            padding: 1rem 2rem;
-            line-height: 1.25;
-            text-decoration: none;
-            color: inherit;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        a:hover {
-            background-color: var(--text-color);
-            color: var(--bg-color);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            a { transition: none; }
+        @media (forced-colors: active) {
+            .wordmark {
+                background: none;
+                -webkit-text-fill-color: currentColor;
+            }
+            .key { border: 1px solid; }
         }
     </style>
 </head>
 <body>
+
+<div class="screen">
+    <header class="top">
+        <a class="brand ps" href="/">coze.org</a>
+        <nav aria-label="Function keys">
+            <a class="fkey ps" href="/#directory"><span class="key" aria-hidden="true">F1</span> Directory</a>
+        </nav>
+    </header>
+
     <main>
-        <h1>coze.org</h1>
-        <p>Nothing lives at this address. Nothing ever did.</p>
-        <a href="/">Back to coze.org</a>
+        <div class="bar bar--red"></div>
+        <h1 class="band ps"><span class="wordmark">404</span></h1>
+        <div class="bar bar--cyan"></div>
+
+        <div class="msg">
+            <p class="basic ps" aria-hidden="true">LOAD"this page",8<br>Searching for this page</p>
+            <p class="error ps">?File not found error</p>
+            <p>Nothing lives at this address. It may never have.</p>
+            <p class="ready ps" aria-hidden="true">Ready.<span class="cursor"></span></p>
+            <a class="btn ps" href="/">F1: Back to directory</a>
+        </div>
+
+        <hr class="break">
     </main>
+
+    <footer>
+        <p class="foot">Kept by Arda Karaduman until it sells. (c) 2026.</p>
+    </footer>
+</div>
+
 </body>
 </html>
